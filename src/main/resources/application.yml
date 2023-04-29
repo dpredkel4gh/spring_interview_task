@@ -1,0 +1,77 @@
+server.port: ${PORT:8081}
+
+spring:
+  messages:
+    basename: messages/messages
+  application.name: yellow-test
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddlAuto: validate
+    properties:
+      hibernate:
+        jdbc.lob.non_contextual_creation: true
+  task:
+    execution:
+      thread-name-prefix: gen-task-
+      pool:
+        core-size: 10
+        keep-alive:
+        max-size: 10
+        queue-capacity: 5000
+        allow-core-thread-timeout: true
+    scheduling:
+      thread-name-prefix: gen-sched-
+      pool:
+        size: 2
+
+settings:
+  security:
+    encoder:
+      strength: -1
+    clients:
+      - id: KQwsZuELRC9c3nZcPXi9
+        secret: SPbDJCCmYoisOsuD5uz4
+        auto-approve: true
+        grant-types:
+          - password
+          - refresh_token
+        scopes:
+          - client
+        accessTokenValiditySeconds: 43200 #60 * 60 * 12
+        refreshTokenValiditySeconds: 86400 #60 * 60 * 24
+    certificate:
+      store:
+        file: classpath:jwt/jwt.jks
+        password: xNlslZP6AtHWm2YOdUVX
+      key:
+        alias: IbFkZQMN7pZhVYm15TuM
+        password: NXakObT0ryKD5KeQlI4A
+  general:
+    version: ${VERSION:0.1}
+    time-zone: UTC
+  scheduler:
+    period:
+      market-data: 10000
+    cron:
+      quote.clean: 0 0 2 * * *
+  swagger:
+    title: Yellow
+    description: Yellow REST API
+    base-package: com.yellow.test.controller
+    ant-pattern: /**
+    api-key:
+      name: apiKey
+      keyname: Authorization
+      pass-as: header
+    security:
+      scope-separator: ","
+      authorization-scope:
+        scope: global
+        description: accessEverything
+      reference: ${app.swagger.api-key.name}
+
+logging:
+  path: log
